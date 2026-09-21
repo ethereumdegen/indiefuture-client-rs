@@ -1,0 +1,23 @@
+[package]
+name = "indiefuture-client"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91"
+description = "Rust client for the indiefuture API and its signed webhooks."
+repository = "https://github.com/ethereumdegen/indiefuture-client-rs"
+license = "MIT"
+
+[dependencies]
+bytes = "1"
+chrono = { version = "0.4", features = ["serde"] }
+hmac = "0.12"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+subtle = "2"
+thiserror = "2"
+uuid = { version = "1", features = ["serde", "v4"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
