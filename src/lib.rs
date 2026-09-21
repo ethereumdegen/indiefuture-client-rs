@@ -26,11 +26,13 @@
 //! for the registered endpoint, then treat the body's `id` as an idempotency
 //! key — a retried delivery carries the same one.
 
+#[cfg(feature = "client")]
 pub mod client;
 pub mod contract;
 pub mod model;
 pub mod webhook;
 
+#[cfg(feature = "client")]
 pub use client::{Client, Config};
 pub use contract::{DELIVERY_HEADER, EVENT_HEADER, EVENTS, EventDef, SIGNATURE_HEADER, SIGNATURE_TOLERANCE_SECS, TEST_EVENT, WEBHOOK_PATH, subscribable};
 pub use model::{
@@ -39,6 +41,7 @@ pub use model::{
 };
 
 /// What went wrong talking to indiefuture.
+#[cfg(feature = "client")]
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("could not reach indiefuture")]
@@ -53,6 +56,7 @@ pub enum Error {
     Decode(#[from] serde_json::Error),
 }
 
+#[cfg(feature = "client")]
 impl Error {
     pub(crate) fn api(status: reqwest::StatusCode, body: &serde_json::Value) -> Self {
         let message = body.pointer("/error/message").and_then(serde_json::Value::as_str).unwrap_or("no message");
@@ -65,6 +69,7 @@ impl Error {
     }
 }
 
+#[cfg(feature = "client")]
 pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 /// Where a consumer receives deliveries, on its own origin.

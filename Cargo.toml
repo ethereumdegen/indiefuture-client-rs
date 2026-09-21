@@ -7,16 +7,22 @@ description = "Rust client for the indiefuture API and its signed webhooks."
 repository = "https://github.com/ethereumdegen/indiefuture-client-rs"
 license = "MIT"
 
+[features]
+default = ["client"]
+# The HTTP client. Off, the crate is just the wire contract: header names, the
+# event list and signature verification, with no reqwest in the tree.
+client = ["dep:bytes", "dep:reqwest", "dep:thiserror"]
+
 [dependencies]
-bytes = "1"
+bytes = { version = "1", optional = true }
 chrono = { version = "0.4", features = ["serde"] }
 hmac = "0.12"
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"], optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
 subtle = "2"
-thiserror = "2"
+thiserror = { version = "2", optional = true }
 uuid = { version = "1", features = ["serde", "v4"] }
 
 [dev-dependencies]

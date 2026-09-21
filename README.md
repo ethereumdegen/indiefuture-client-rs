@@ -74,3 +74,12 @@ write-scoped key and is safe to run on every boot.
 The crate deserializes what an older indiefuture sends: fields a server may
 omit are optional or defaulted. Bump the git dependency when you need an
 endpoint added in a later release.
+
+## Contract only
+
+A server, or anything that just needs to check a signature, can leave the HTTP
+client out — no reqwest in the dependency tree:
+
+```toml
+indiefuture-client = { git = "…", default-features = false }
+```

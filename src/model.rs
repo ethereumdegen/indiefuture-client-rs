@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use uuid::Uuid;
 
+#[cfg(feature = "client")]
 #[derive(Debug, Deserialize)]
 pub(crate) struct Created {
     pub id: Uuid,
@@ -194,8 +195,9 @@ pub enum Connected {
     Rotated,
 }
 
-/// Read the episode pack out of a `/text` answer.
-pub(crate) fn parse_notes(body: &Value) -> Notes {
+/// Read the episode pack out of a `/text` answer. [`crate::Client::notes`]
+/// calls this; it is public so a stored answer can be re-read without a call.
+pub fn parse_notes(body: &Value) -> Notes {
     let pack = body["kinds"]
         .as_array()
         .and_then(|kinds| kinds.iter().find(|kind| kind["kind"] == "episode_pack"))
