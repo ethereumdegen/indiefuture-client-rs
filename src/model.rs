@@ -32,6 +32,9 @@ pub struct EpisodeSummary {
     pub status: String,
     pub medium: Option<String>,
     pub duration_ms: Option<i64>,
+    /// When the episode is public; a future value means it is scheduled.
+    #[serde(default)]
+    pub published_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -251,6 +254,22 @@ mod tests {
         .unwrap();
         assert_eq!((bare.transcript_status.as_str(), bare.publication.members_only, bare.assets.len()), ("", false, 0));
         assert_eq!(bare.summary.duration_ms, None);
+    }
+
+    #[test]
+    fn an_episode_summary_reports_its_publication_time() {
+        let published_at = Utc::now();
+        let episode: EpisodeSummary = serde_json::from_value(json!({
+            "id": Uuid::nil(),
+            "show_id": Uuid::nil(),
+            "slug": "published",
+            "title": "Published",
+            "status": "ready",
+            "published_at": published_at,
+        }))
+        .unwrap();
+
+        assert_eq!(episode.published_at, Some(published_at));
     }
 
     #[test]
